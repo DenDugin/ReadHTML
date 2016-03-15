@@ -16,16 +16,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QNetworkAccessManager *manager_2 = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(replyFinished(QNetworkReply*)));
     connect(manager_2, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(replyFinished_2(QNetworkReply*)));
-//    manager->get(QNetworkRequest(QUrl("http://example.com/")));
-      manager->get(QNetworkRequest(QUrl("http://kurs4today.ru/USD")));
-      manager_2->get(QNetworkRequest(QUrl("https://pogoda.yandex.ru/omsk")));
+      manager->get(QNetworkRequest(QUrl("http://kurs4today.ru/USD"))); 
+      manager_2->get(QNetworkRequest(QUrl("https://pogoda.yandex.ru/omsk")));  $$
 }
 
 
@@ -44,11 +42,8 @@ void MainWindow::replyFinished (QNetworkReply *reply)
 //            qDebug() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 //            qDebug() << reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
             //qDebug() << reply->readAll();
-
             QString answer = QString::fromUtf8(reply->readAll());
-
             qDebug()<<"answer"<<answer;
-
             int j = 0;
             QString S;
             QTime time = QTime::currentTime();
@@ -61,9 +56,7 @@ void MainWindow::replyFinished (QNetworkReply *reply)
                  ++j;
                  break;
              }
-
             ui->textBrowser->append(tr("Курс доллара $ на %1,%2 равен:<font color=red>%3</font> rub").arg(time.toString()).arg(date.toString()).arg(S));
-
             j = 0;
             QString str = date.toString("dd.MM.yyyy");
             QString res;
@@ -78,17 +71,13 @@ void MainWindow::replyFinished (QNetworkReply *reply)
             }
             ui->textBrowser->append("\n");
             ui->textBrowser->append(tr("Курс доллара $ на %1 равен: <font color=red>%2</font> rub").arg(str).arg(res));
-
-
             QWebPage page;
             page.mainFrame()->setHtml(answer);
             QWebElement parse = page.mainFrame()->documentElement();  // main body
             QWebElement result = parse.findFirst("Россия");
-
             //qDebug()<<result.toPlainText();
             qDebug()<<parse.toPlainText();
             qDebug()<<result.toPlainText();
-
 
             QFile file("D:/downloader.txt");
             file.resize(0);
@@ -98,8 +87,6 @@ void MainWindow::replyFinished (QNetworkReply *reply)
             }
         }
         reply->deleteLater();
-
-
 }
 
 void MainWindow::replyFinished_2(QNetworkReply *reply)
@@ -118,11 +105,9 @@ void MainWindow::replyFinished_2(QNetworkReply *reply)
         ++j;
         break;
     }
-
     ui->textBrowser->append("\n");
     ui->textBrowser->append(tr("Температура на %1,%2 равна:<font color=red>%3</font> °C").arg(time).arg(date.toString()).arg(tempr));
     ui->textBrowser->append("\n");
-
 }
 
 MainWindow::~MainWindow()
